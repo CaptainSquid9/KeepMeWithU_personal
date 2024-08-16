@@ -1,21 +1,16 @@
 const { google } = require("googleapis");
 const { PassThrough } = require("stream");
 
-const clientId = process.env.GOOGLE_CLIENTID;
-const clientSecret = process.env.GOOGLE_CLIENTSECRET;
-const redirectUri = process.env.GOOGLE_REDIRECTURI;
+const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+const jwtClient = new google.auth.JWT(
+  credentials.client_email,
+  null,
+  credentials.private_key,
+  ["https://www.googleapis.com/auth/drive.readonly"]
+);
 
-async function fetchRandomPhoto(accessToken, folderId) {
-  const oauth2Client = new google.auth.OAuth2(
-    clientId,
-    clientSecret,
-    redirectUri
-  );
-  oauth2Client.setCredentials({
-    access_token: accessToken,
-  });
-
-  const drive = google.drive({ version: "v3", auth: oauth2Client });
+async function fetchRandomPhoto(folderId) {
+  const drive = google.drive({ version: "v3", auth: jwtClient });
   const response = await drive.files.list({
     q: `'${folderId}' in parents and mimeType contains 'image/'`,
     fields: "files(id, name)",
@@ -54,8 +49,7 @@ exports.handler = async (event, context) => {
       };
     }
 
-    const accessToken = authHeader.split("Bearer ")[1];
-    const folderId = event.queryStringParameters.folderId;
+    const folderId = "1-1S1b2VKJCPx8pkzd5Nn0kY2u74xJ9P4";
 
     if (!folderId) {
       return {
