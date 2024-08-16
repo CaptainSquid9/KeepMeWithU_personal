@@ -61,7 +61,7 @@ exports.handler = async (event, context) => {
       };
     }
 
-    const fileId = await fetchRandomPhoto(accessToken, folderId);
+    const fileId = await fetchRandomPhoto(folderId);
     if (!fileId) {
       return {
         statusCode: 404,
@@ -73,14 +73,7 @@ exports.handler = async (event, context) => {
       };
     }
 
-    const oauth2Client = new google.auth.OAuth2(
-      clientId,
-      clientSecret,
-      redirectUri
-    );
-    oauth2Client.setCredentials({ access_token: accessToken });
-
-    const drive = google.drive({ version: "v3", auth: oauth2Client });
+    const drive = google.drive({ version: "v3", auth: jwtClient });
     const response = await drive.files.get(
       { fileId, alt: "media" },
       { responseType: "stream" }

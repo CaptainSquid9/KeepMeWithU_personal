@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./flashcard.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import CryptoJS, { AES } from "crypto-js";
 
 type ValuesObject = {
@@ -16,8 +16,6 @@ var LoadedInternal = -1;
 
 var CounterOut: ValuesObject;
 function flashCard() {
-  const navigate = useNavigate();
-
   var Timer: NodeJS.Timeout | undefined;
   var [IdleTimer, setIdleTimer] = useState<NodeJS.Timeout | undefined>();
   const [LoadedPictures, setLoadedPictures] = useState<number>(0);
@@ -106,9 +104,6 @@ function flashCard() {
     }
   };
   useEffect(() => {
-    if (!folderId) {
-      navigate("/");
-    }
     for (var i = 0; i < Layers; i++) {
       fetchRandomPhoto(i.toString());
       //  console.log("Fetching");
