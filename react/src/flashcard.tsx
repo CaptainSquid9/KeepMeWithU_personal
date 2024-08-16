@@ -48,7 +48,7 @@ function flashCard() {
     setLoadedPictures(LoadedPictures + 1);
     LoadedInternal += 1;
     //console.log(`Loaded pictures: ${LoadedPictures}, ${LoadedInternal}`);
-    if (LoadedPictures == Layers - 1 || LoadedInternal == Layers - 1) {
+    if (LoadedInternal == Layers - 1) {
       setAllow(true);
       AllowSlide = true;
       Timer = setTimeout(() => {
@@ -118,12 +118,21 @@ function flashCard() {
       var InternalCounterY = divY[id];
       const StrID = id.toString();
 
-      clearTimeout(IdleTimer);
-      clearTimeout(Timer);
-
       setAllow(false);
       AllowSlide = false;
       setSwipedBool((prevState) => ({ ...prevState, [StrID]: true }));
+
+      Timer = setTimeout(() => {
+        console.log("Running timer");
+        if (id == 9) {
+          Swipe(0, false);
+        } else {
+          Swipe(id + 1, false);
+        }
+      }, 4000);
+      console.log(Timer);
+
+      setIdleTimer(Timer);
 
       const RandomQuarter = Math.floor(Math.random() * 3);
       //Move flash card on one of the four diagonals depending on quadrile
@@ -157,16 +166,6 @@ function flashCard() {
         }, 100);
       }
 
-      Timer = setTimeout(() => {
-        if (id == 9) {
-          Swipe(0, false);
-        } else {
-          Swipe(id + 1, false);
-        }
-      }, 4000);
-
-      setIdleTimer(Timer);
-
       //Once animation is done
       setTimeout(() => {
         setAllow(true);
@@ -199,20 +198,14 @@ function flashCard() {
           <div
             id={i.toString()}
             className={`flashCardDiv ${SwipedBool[i] ? "FadeOut" : ""}`}
-            onTouchMove={() => {
-              clearTimeout(IdleTimer), clearTimeout(Timer);
-            }}
-            onTouchEndCapture={() => {
-              Swipe(i, false);
-            }}
-            onTouchEnd={() => {
-              Swipe(i, false);
-            }}
             onMouseDown={() => {
-              setMDBool(true), clearTimeout(IdleTimer), clearTimeout(Timer);
+              setMDBool(true),
+                clearTimeout(IdleTimer),
+                clearTimeout(Timer),
+                console.log("Mouse down");
             }}
             onMouseUp={() => {
-              setMDBool(false), Swipe(i, false);
+              setMDBool(false), Swipe(i, false), console.log("Mouse up");
             }}
             style={{ top: divY[i], left: divX[i], zIndex: Counter[i] }}
           >
