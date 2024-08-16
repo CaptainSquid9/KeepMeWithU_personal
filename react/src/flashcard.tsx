@@ -202,6 +202,9 @@ function flashCard() {
             onTouchMove={() => {
               clearTimeout(IdleTimer), clearTimeout(Timer);
             }}
+            onTouchEndCapture={() => {
+              Swipe(i, false);
+            }}
             onTouchEnd={() => {
               Swipe(i, false);
             }}
