@@ -1,0 +1,20 @@
+{
+  "web": {
+    "client_id": "1066485499060-0io67am55s3sbuj9qlru7dqb00olumd6.apps.googleusercontent.com",
+    "project_id": "mem2u-430622",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret": "v",
+    "redirect_uris": [
+      "https://mem2u.cubicle.site/auth/callback",
+      "http://localhost:5173/auth/callback",
+      "http://localhost:8888/auth/callback"
+    ],
+    "javascript_origins": [
+      "https://mem2u.cubicle.site",
+      "http://localhost:5173",
+      "http://localhost:8888"
+    ]
+  }
+}
