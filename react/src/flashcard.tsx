@@ -129,7 +129,7 @@ function flashCard() {
         } else {
           Swipe(id + 1, false);
         }
-      }, 30000);
+      }, 15000);
       console.log(Timer);
 
       setIdleTimer(Timer);
