@@ -18,7 +18,6 @@ var CounterOut: ValuesObject;
 function flashCard() {
   var Time: number;
   Time = new Date().getHours();
-  console.log(Time);
 
   var Timer: NodeJS.Timeout | undefined;
   var [IdleTimer, setIdleTimer] = useState<NodeJS.Timeout | undefined>();
@@ -38,6 +37,7 @@ function flashCard() {
   const [MouseDownBool, setMDBool] = useState<boolean>(false);
   const [Allow, setAllow] = useState<boolean>(false);
   var AllowSlide = false;
+  var start_check = false;
   //Bool checking if swiped for each layer
   const [SwipedBool, setSwipedBool] = useState<BoolsObject>({});
   //Z-index counter for each layer
@@ -49,7 +49,7 @@ function flashCard() {
   const [photoUrl, setPhotoUrl] = useState<StringObject>({});
 
   function Start(elem: number) {
-    if (Time > 10 && Time < 21) {
+    if (Time > 10 && Time < 20) {
       setLoadedPictures(LoadedPictures + 1);
       LoadedInternal += 1;
       //console.log(`Loaded pictures: ${LoadedPictures}, ${LoadedInternal}`);
@@ -90,33 +90,38 @@ function flashCard() {
 
   const fetchRandomPhoto = async (id: string) => {
     //console.log(folderId);
-    if (Auth) {
-      accessToken = AES.decrypt(Auth, "TEST!NGPURP=S3S").toString(
-        CryptoJS.enc.Utf8
-      );
-    }
-    const response = await fetch(`/api/randomPhoto?folderId=${folderId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    if (response.ok) {
-      const photoData = await response.json();
-      const imageUrl = photoData.image;
-      setPhotoUrl((prevState) => ({ ...prevState, [id]: imageUrl }));
-    } else {
-      fetchRandomPhoto(id);
-      console.error("Error fetching photo", response.statusText);
+    if (Time > 10 && Time < 20) {
+      if (Auth) {
+        accessToken = AES.decrypt(Auth, "TEST!NGPURP=S3S").toString(
+          CryptoJS.enc.Utf8
+        );
+      }
+      console.log("Function called");
+      const response = await fetch(`/api/randomPhoto?folderId=${folderId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.ok) {
+        const photoData = await response.json();
+        const imageUrl = photoData.image;
+        setPhotoUrl((prevState) => ({ ...prevState, [id]: imageUrl }));
+      } else {
+        fetchRandomPhoto(id);
+        console.error("Error fetching photo", response.statusText);
+      }
     }
   };
   useEffect(() => {
-    for (var i = 0; i < Layers; i++) {
-      fetchRandomPhoto(i.toString());
-      //  console.log("Fetching");
+    if (start_check == false) {
+      start_check = true;
+      for (var i = 0; i < Layers; i++) {
+        fetchRandomPhoto(i.toString());
+        //  console.log("Fetching");
+      }
     }
   }, []);
   //Swipe animations
-
   function Swipe(id: number, update: boolean) {
     if ((AllowSlide == true || Allow == true) && update == false) {
       var SlideInterval: NodeJS.Timeout;
