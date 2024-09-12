@@ -16,6 +16,10 @@ var LoadedInternal = -1;
 
 var CounterOut: ValuesObject;
 function flashCard() {
+  var Time: number;
+  Time = new Date().getHours();
+  console.log(Time);
+
   var Timer: NodeJS.Timeout | undefined;
   var [IdleTimer, setIdleTimer] = useState<NodeJS.Timeout | undefined>();
   const [LoadedPictures, setLoadedPictures] = useState<number>(0);
@@ -45,37 +49,39 @@ function flashCard() {
   const [photoUrl, setPhotoUrl] = useState<StringObject>({});
 
   function Start(elem: number) {
-    setLoadedPictures(LoadedPictures + 1);
-    LoadedInternal += 1;
-    //console.log(`Loaded pictures: ${LoadedPictures}, ${LoadedInternal}`);
-    if (LoadedInternal == Layers - 1) {
-      setAllow(true);
-      AllowSlide = true;
-      Timer = setTimeout(() => {
-        Swipe(0, false);
-      }, 1000);
-      setIdleTimer(Timer);
-      //  console.log("Done");
-    } else if (LoadedPictures < Layers - 1 || LoadedInternal < Layers - 1) {
-      let strElem = elem.toString();
-      //console.log("positioning");
-      //Set default
-      setDivX((prevState) => ({
-        ...prevState,
-        [strElem]: window.innerWidth / 2,
-      }));
-      setDivY((prevState) => ({
-        ...prevState,
-        [strElem]: window.innerHeight / 2,
-      }));
-      setSwipedBool((prevState) => ({ ...prevState, [strElem]: false }));
-      setCounterOut((prevState) => ({
-        ...prevState,
-        [strElem]: 214748364 - elem,
-      }));
-      CounterOut = { ...CounterOut, [strElem]: 214748364 - elem };
-      //console.log(CounterOut);
-      // All images have been loaded: ALlow touch
+    if (Time > 10 && Time < 21) {
+      setLoadedPictures(LoadedPictures + 1);
+      LoadedInternal += 1;
+      //console.log(`Loaded pictures: ${LoadedPictures}, ${LoadedInternal}`);
+      if (LoadedInternal == Layers - 1) {
+        setAllow(true);
+        AllowSlide = true;
+        Timer = setTimeout(() => {
+          Swipe(0, false);
+        }, 1000);
+        setIdleTimer(Timer);
+        //  console.log("Done");
+      } else if (LoadedPictures < Layers - 1 || LoadedInternal < Layers - 1) {
+        let strElem = elem.toString();
+        //console.log("positioning");
+        //Set default
+        setDivX((prevState) => ({
+          ...prevState,
+          [strElem]: window.innerWidth / 2,
+        }));
+        setDivY((prevState) => ({
+          ...prevState,
+          [strElem]: window.innerHeight / 2,
+        }));
+        setSwipedBool((prevState) => ({ ...prevState, [strElem]: false }));
+        setCounterOut((prevState) => ({
+          ...prevState,
+          [strElem]: 214748364 - elem,
+        }));
+        CounterOut = { ...CounterOut, [strElem]: 214748364 - elem };
+        //console.log(CounterOut);
+        // All images have been loaded: ALlow touch
+      }
     }
   }
 
