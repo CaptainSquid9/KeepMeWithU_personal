@@ -17,7 +17,8 @@ var LoadedInternal = -1;
 var CounterOut: ValuesObject;
 function flashCard() {
   var Time: number;
-  Time = new Date().getHours();
+  Time = 11;
+  // new Date().getHours();
 
   var Timer: NodeJS.Timeout | undefined;
   var [IdleTimer, setIdleTimer] = useState<NodeJS.Timeout | undefined>();
@@ -88,7 +89,7 @@ function flashCard() {
 
   const fetchRandomPhoto = async (id: string) => {
     //console.log(folderId);
-    if (Time > 10 && Time < 20) {
+    if (Time > 10 && Time < 21) {
       console.log("Function called");
       const response = await fetch(`/api/randomPhoto`, {});
       if (response.ok) {
