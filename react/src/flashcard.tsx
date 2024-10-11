@@ -26,8 +26,6 @@ function flashCard() {
   //Amount of layers to generate
   const Layers: number = 10;
   //Sent from picker
-  const { folderId, Auth } = useParams();
-  var accessToken: string;
   //X
   const [divX, setDivX] = useState<ValuesObject>({});
 
@@ -91,17 +89,8 @@ function flashCard() {
   const fetchRandomPhoto = async (id: string) => {
     //console.log(folderId);
     if (Time > 10 && Time < 20) {
-      if (Auth) {
-        accessToken = AES.decrypt(Auth, "TEST!NGPURP=S3S").toString(
-          CryptoJS.enc.Utf8
-        );
-      }
       console.log("Function called");
-      const response = await fetch(`/api/randomPhoto?folderId=${folderId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetch(`/api/randomPhoto`, {});
       if (response.ok) {
         const photoData = await response.json();
         const imageUrl = photoData.image;

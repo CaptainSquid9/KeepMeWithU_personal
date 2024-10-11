@@ -2,6 +2,7 @@ const { google } = require("googleapis");
 const { PassThrough } = require("stream");
 
 var Time = new Date().getHours();
+const folderId = "1-1S1b2VKJCPx8pkzd5Nn0kY2u74xJ9P4";
 console.log(Time);
 
 if (Time > 10 && Time < 21) {
@@ -42,29 +43,6 @@ if (Time > 10 && Time < 21) {
     }
 
     try {
-      const authHeader = event.headers.authorization;
-      if (!authHeader) {
-        return {
-          statusCode: 401,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-          body: "Unauthorized",
-        };
-      }
-
-      const folderId = "1-1S1b2VKJCPx8pkzd5Nn0kY2u74xJ9P4";
-
-      if (!folderId) {
-        return {
-          statusCode: 400,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-          body: "Missing folder ID",
-        };
-      }
-
       const fileId = await fetchRandomPhoto(folderId);
       if (!fileId) {
         return {
