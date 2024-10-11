@@ -88,18 +88,18 @@ function flashCard() {
 
   const fetchRandomPhoto = async (id: string) => {
     //console.log(folderId);
-    if (Time > 10 && Time < 21) {
-      console.log("Function called");
-      const response = await fetch(`/api/randomPhoto`, {});
-      if (response.ok) {
-        const photoData = await response.json();
-        const imageUrl = photoData.image;
-        setPhotoUrl((prevState) => ({ ...prevState, [id]: imageUrl }));
-      } else {
-        fetchRandomPhoto(id);
-        console.error("Error fetching photo", response.statusText);
-      }
+    //if (Time > 10 && Time < 21) {
+    console.log("Function called");
+    const response = await fetch(`/api/randomPhoto`, {});
+    if (response.ok) {
+      const photoData = await response.json();
+      const imageUrl = photoData.image;
+      setPhotoUrl((prevState) => ({ ...prevState, [id]: imageUrl }));
+    } else {
+      fetchRandomPhoto(id);
+      console.error("Error fetching photo", response.statusText);
     }
+    //}
   };
   useEffect(() => {
     if (start_check == false) {
