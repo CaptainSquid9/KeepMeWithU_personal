@@ -96,7 +96,6 @@ function flashCard() {
       const imageUrl = photoData.image;
       setPhotoUrl((prevState) => ({ ...prevState, [id]: imageUrl }));
     } else {
-      fetchRandomPhoto(id);
       console.error("Error fetching photo", response.statusText);
     }
     //}
