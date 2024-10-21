@@ -2,7 +2,6 @@ const { google } = require("googleapis");
 const { PassThrough } = require("stream");
 
 var Time = new Date().getHours();
-const imageResults = [];
 const folderId = "1-1S1b2VKJCPx8pkzd5Nn0kY2u74xJ9P4";
 console.log(Time);
 
@@ -24,8 +23,7 @@ async function fetchFolder(folderId) {
 
   const files = response.data.files;
   if (files.length > 0) {
-    const fileIds = files.map((file) => file.id); // Collect all file IDs
-    return fileIds;
+    return files.map((file) => file.id); // Collect all file IDs
   }
   return null;
 }
@@ -76,20 +74,14 @@ async function fetchPhoto(fileIds) {
         },
         body: JSON.stringify({ error: "No photos found" }),
       };
+    } else {
+      const imageResults = await fetchPhoto(fileIds);
+      console.log({
+        body: JSON.stringify({
+          images: imageResults, // Array of images
+        }),
+      });
     }
-
-    await fetchPhoto(fileIds);
-    console.log({
-      body: JSON.stringify({
-        images: imageResults, // Array of images
-      }),
-    });
-
-    return {
-      body: JSON.stringify({
-        images: imageResults, // Array of images
-      }),
-    };
   } catch (error) {
     console.error("Error fetching photo:", error);
     return {

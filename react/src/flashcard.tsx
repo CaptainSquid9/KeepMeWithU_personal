@@ -90,14 +90,14 @@ function flashCard() {
     console.log("Function called");
     const response = await fetch(`/api/randomPhoto`);
     console.log(response);
-    /**   if (response.ok) {
+    if (response.ok) {
       const photoData = await response.json();
+      console.log(photoData);
       const imageUrl = photoData.image;
       setPhotoUrl((prevState) => ({ ...prevState, [id]: imageUrl }));
     } else {
       console.error("Error fetching photo", response.statusText);
     }
-  **/
     //}
   };
   useEffect(() => {
