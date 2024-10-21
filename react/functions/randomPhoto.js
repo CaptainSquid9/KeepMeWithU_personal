@@ -2,6 +2,7 @@ const { google } = require("googleapis");
 const { PassThrough } = require("stream");
 
 var Time = new Date().getHours();
+const imageResults = [];
 const folderId = "1-1S1b2VKJCPx8pkzd5Nn0kY2u74xJ9P4";
 console.log(Time);
 
@@ -14,7 +15,7 @@ const jwtClient = new google.auth.JWT(
   ["https://www.googleapis.com/auth/drive.readonly"]
 );
 
-async function fetchRandomPhoto(folderId) {
+async function fetchFolder(folderId) {
   const drive = google.drive({ version: "v3", auth: jwtClient });
   const response = await drive.files.list({
     q: `'${folderId}' in parents and mimeType contains 'image/'`,
@@ -23,38 +24,16 @@ async function fetchRandomPhoto(folderId) {
 
   const files = response.data.files;
   if (files.length > 0) {
-    const randomIndex = Math.floor(Math.random() * files.length);
-    return files[randomIndex].id;
+    for (var file in files) {
+      var fileslist = [];
+      fileslist += file.id;
+    }
+    return fileslist;
   }
-  return null;
 }
 
-exports.handler = async (event, context) => {
-  if (event.httpMethod === "OPTIONS") {
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        "Access-Control-Allow-Methods": "GET, OPTIONS",
-      },
-      body: "",
-    };
-  }
-
-  try {
-    const fileId = await fetchRandomPhoto(folderId);
-    if (!fileId) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ error: "No photos found" }),
-      };
-    }
-
+async function fetchPhoto(fileIds) {
+  for (var fileId in fileIds) {
     const drive = google.drive({ version: "v3", auth: jwtClient });
     const response = await drive.files.get(
       { fileId, alt: "media" },
@@ -65,37 +44,45 @@ exports.handler = async (event, context) => {
     response.data.pipe(bufferStream);
 
     const chunks = [];
-    bufferStream.on("data", (chunk) => {
-      chunks.push(chunk);
-    });
-
-    return new Promise((resolve, reject) => {
+    const base64Image = await new Promise((resolve, reject) => {
+      bufferStream.on("data", (chunk) => {
+        chunks.push(chunk);
+      });
       bufferStream.on("end", () => {
         const responseBuffer = Buffer.concat(chunks);
         const base64Image = responseBuffer.toString("base64");
-        resolve({
-          statusCode: 200,
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-          body: JSON.stringify({
-            image: `data:image/jpeg;base64,${base64Image}`,
-          }),
-        });
+        resolve(`data:image/jpeg;base64,${base64Image}`);
       });
 
       bufferStream.on("error", (err) => {
         console.error("Error", err);
-        resolve({
-          statusCode: 500,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-          },
-          body: "Error fetching photo",
-        });
+        reject(err); // Reject in case of error
       });
     });
+
+    // Add the base64 image result to the array
+    imageResults.push(base64Image);
+  }
+}
+async () => {
+  try {
+    const fileIds = await fetchFolder(folderId);
+    if (!fileIds) {
+      return {
+        statusCode: 404,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ error: "No photos found" }),
+      };
+    }
+    await fetchPhoto(fileIds);
+    return {
+      body: JSON.stringify({
+        images: imageResults, // Array of images
+      }),
+    };
   } catch (error) {
     console.error("Error fetching photo:", error);
     return {

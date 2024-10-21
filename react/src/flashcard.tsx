@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./flashcard.css";
-import { useParams } from "react-router-dom";
-import CryptoJS, { AES } from "crypto-js";
 
 type ValuesObject = {
   [key: string]: number; // This allows indexing with numbers
@@ -91,20 +89,22 @@ function flashCard() {
     //if (Time > 10 && Time < 21) {
     console.log("Function called");
     const response = await fetch(`/api/randomPhoto`, {});
-    if (response.ok) {
+    console.log(response);
+    /**   if (response.ok) {
       const photoData = await response.json();
       const imageUrl = photoData.image;
       setPhotoUrl((prevState) => ({ ...prevState, [id]: imageUrl }));
     } else {
       console.error("Error fetching photo", response.statusText);
     }
+  **/
     //}
   };
   useEffect(() => {
     if (start_check == false) {
       start_check = true;
+      fetchRandomPhoto("");
       for (var i = 0; i < Layers; i++) {
-        fetchRandomPhoto(i.toString());
         //  console.log("Fetching");
       }
     }

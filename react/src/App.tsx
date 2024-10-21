@@ -7,7 +7,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Flashcard />} />
+        <Route key="Flashcard" path="/" element={<Flashcard />} />
       </Routes>
     </Router>
   );
