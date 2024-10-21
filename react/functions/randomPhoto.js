@@ -64,7 +64,7 @@ async function fetchPhoto(fileIds) {
     imageResults.push(base64Image);
   }
 }
-async () => {
+(async () => {
   try {
     const fileIds = await fetchFolder(folderId);
     if (!fileIds) {
@@ -93,5 +93,5 @@ async () => {
       body: "Error fetching photo",
     };
   }
-};
+})();
 //}
