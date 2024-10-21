@@ -88,7 +88,7 @@ function flashCard() {
     //console.log(folderId);
     //if (Time > 10 && Time < 21) {
     console.log("Function called");
-    const response = await fetch(`/api/randomPhoto`, {});
+    const response = await fetch(`/functions/randomPhoto`, {});
     console.log(response);
     /**   if (response.ok) {
       const photoData = await response.json();
