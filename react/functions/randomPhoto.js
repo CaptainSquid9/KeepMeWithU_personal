@@ -6,7 +6,7 @@ const imageResults = [];
 const folderId = "1-1S1b2VKJCPx8pkzd5Nn0kY2u74xJ9P4";
 console.log(Time);
 
-//if (Time > 8 && Time < 22) {
+// if (Time > 8 && Time < 22) {
 const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
 const jwtClient = new google.auth.JWT(
   credentials.client_email,
@@ -24,16 +24,14 @@ async function fetchFolder(folderId) {
 
   const files = response.data.files;
   if (files.length > 0) {
-    for (var file in files) {
-      var fileslist = [];
-      fileslist += file.id;
-    }
-    return fileslist;
+    const fileIds = files.map((file) => file.id); // Collect all file IDs
+    return fileIds;
   }
+  return null;
 }
 
 async function fetchPhoto(fileIds) {
-  for (var fileId in fileIds) {
+  for (const fileId of fileIds) {
     const drive = google.drive({ version: "v3", auth: jwtClient });
     const response = await drive.files.get(
       { fileId, alt: "media" },
@@ -64,10 +62,12 @@ async function fetchPhoto(fileIds) {
     imageResults.push(base64Image);
   }
 }
+
+// Immediately Invoked Async Function
 (async () => {
   try {
     const fileIds = await fetchFolder(folderId);
-    if (!fileIds) {
+    if (!fileIds || fileIds.length === 0) {
       return {
         statusCode: 404,
         headers: {
@@ -77,7 +77,14 @@ async function fetchPhoto(fileIds) {
         body: JSON.stringify({ error: "No photos found" }),
       };
     }
+
     await fetchPhoto(fileIds);
+    console.log({
+      body: JSON.stringify({
+        images: imageResults, // Array of images
+      }),
+    });
+
     return {
       body: JSON.stringify({
         images: imageResults, // Array of images
@@ -94,4 +101,3 @@ async function fetchPhoto(fileIds) {
     };
   }
 })();
-//}
