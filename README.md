@@ -11,7 +11,7 @@ Typescript React Web App.
   Use Google Drive API to generate a slideshow that automatically updates with new photos taken from your device
   Allows family members to be a part of my life without having to rely on additional hassles or constant updating
 ## Running
-  Currently running on Netlify https://mem2u.cubicle.site
+  Currently NOT running on https://mem2u.cubicle.site
 ## Details
   Base directory ./react
   Netlify functions folder ./react/functions
