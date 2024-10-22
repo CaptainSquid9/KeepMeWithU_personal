@@ -96,13 +96,13 @@ function flashCard() {
     console.log(photoData);
     if (response.ok) {
       for (var i = 0; i < Layers; i++) {
-        fetchRandomPhoto(i.toString());
+        getRandomPhoto(i.toString());
       }
     } else {
       console.error("Error fetching photo", response.statusText);
     }
   };
-  const fetchRandomPhoto = async (id: string) => {
+  const getRandomPhoto = async (id: string) => {
     //console.log(folderId);
     //if (Time > 10 && Time < 21) {
     console.log("Function called");
@@ -117,9 +117,7 @@ function flashCard() {
   useEffect(() => {
     if (start_check == false) {
       start_check = true;
-      for (var i = 0; i < Layers; i++) {
-        fetchRandomPhoto(i.toString());
-      }
+      fetchPhotos();
     }
   }, []);
   //Swipe animations
@@ -184,7 +182,7 @@ function flashCard() {
         AllowSlide = true;
         clearInterval(SlideInterval);
         setSwipedBool((prevState) => ({ ...prevState, [StrID]: false }));
-        fetchRandomPhoto(StrID);
+        getRandomPhoto(StrID);
         setDivX((prevState) => ({
           ...prevState,
           [StrID]: window.innerWidth / 2,
