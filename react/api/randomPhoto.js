@@ -52,7 +52,7 @@ export default async function handler(req, res) {
     }
 
     // Fetch the ArrayBuffer data for each file
-    const buffers = await Promise.all(fileIds.map(await fetchPhoto()));
+    const buffers = await Promise.all(fileIds.map(fetchPhoto()));
 
     res.status(200).json({ images: buffers });
   } catch (error) {

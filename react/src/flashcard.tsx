@@ -18,7 +18,6 @@ var LoadedInternal = -1;
 var CounterOut: ValuesObject;
 function flashCard() {
   var Time: number;
-  var photoData: PhotoData;
   Time = new Date().getHours();
 
   var Timer: NodeJS.Timeout | undefined;
@@ -96,19 +95,19 @@ function flashCard() {
       },
     });
 
-    photoData = await response.json();
+    const photoData = await response.json();
     console.log(photoData);
     if (response.ok) {
       for (var i = 0; i < Layers; i++) {
         // Convert the ArrayBuffer to a Blob
-        getRandomPhoto(i.toString());
+        getRandomPhoto(i.toString(), photoData);
       }
     } else {
       console.error("Error fetching photo", response.statusText);
     }
   };
 
-  const getRandomPhoto = async (id: string) => {
+  const getRandomPhoto = async (id: string, photoData: PhotoData) => {
     //console.log(folderId);
     //if (Time > 10 && Time < 21) {
     console.log("Function called");
