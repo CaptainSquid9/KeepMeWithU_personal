@@ -10,11 +10,17 @@ type BoolsObject = {
 type StringObject = {
   [key: string]: string; // This allows indexing with numbers
 };
+interface PhotoData {
+  images: {
+    url: string;
+  };
+}
 var LoadedInternal = -1;
 
 var CounterOut: ValuesObject;
 function flashCard() {
   var Time: number;
+  var photoData: PhotoData;
   Time = new Date().getHours();
 
   var Timer: NodeJS.Timeout | undefined;
@@ -84,27 +90,35 @@ function flashCard() {
   //Random photo
   // Called by every layer
 
+  const fetchPhotos = async () => {
+    const response = await fetch(`/api/randomPhoto`);
+    photoData = await response.json();
+    console.log(photoData);
+    if (response.ok) {
+      for (var i = 0; i < Layers; i++) {
+        fetchRandomPhoto(i.toString());
+      }
+    } else {
+      console.error("Error fetching photo", response.statusText);
+    }
+  };
   const fetchRandomPhoto = async (id: string) => {
     //console.log(folderId);
     //if (Time > 10 && Time < 21) {
     console.log("Function called");
-    const response = await fetch(`/api/randomPhoto`);
-    console.log(response);
-    if (response.ok) {
-      const photoData = await response.json();
-      console.log(photoData);
-      setPhotoUrl((prevState) => ({ ...prevState, [id]: imageUrl }));
-    } else {
-      console.error("Error fetching photo", response.statusText);
-    }
+
+    var Random = Math.random() * photoData.images.url.length;
+    setPhotoUrl((prevState) => ({
+      ...prevState,
+      [id]: photoData.images.url[Random],
+    }));
     //}
   };
   useEffect(() => {
     if (start_check == false) {
       start_check = true;
-      fetchRandomPhoto("");
       for (var i = 0; i < Layers; i++) {
-        //  console.log("Fetching");
+        fetchRandomPhoto(i.toString());
       }
     }
   }, []);
