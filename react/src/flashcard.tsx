@@ -232,7 +232,7 @@ function flashCard() {
           >
             <div
               style={{
-                backgroundImage: `url("${photoUrl[i]}")`,
+                backgroundImage: `${photoUrl[i]}`,
                 backgroundPosition: "center",
                 backgroundSize: "cover",
                 filter: "blur(8px)",
