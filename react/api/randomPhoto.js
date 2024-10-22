@@ -45,11 +45,11 @@ async function fetchFolder(folderId) {
         body: JSON.stringify({ error: "No photos found" }),
       };
     } else {
-      console.log({
+      return {
         body: JSON.stringify({
           images: fileIds, // Array of images
         }),
-      });
+      };
     }
   } catch (error) {
     console.error("Error fetching photo:", error);
