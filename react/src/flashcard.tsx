@@ -11,7 +11,7 @@ type StringObject = {
   [key: string]: string; // This allows indexing with numbers
 };
 interface PhotoData {
-  images: string;
+  images: Array<ArrayBuffer>;
 }
 var LoadedInternal = -1;
 
@@ -100,12 +100,14 @@ function flashCard() {
     console.log(photoData);
     if (response.ok) {
       for (var i = 0; i < Layers; i++) {
+        // Convert the ArrayBuffer to a Blob
         getRandomPhoto(i.toString());
       }
     } else {
       console.error("Error fetching photo", response.statusText);
     }
   };
+
   const getRandomPhoto = async (id: string) => {
     //console.log(folderId);
     //if (Time > 10 && Time < 21) {
@@ -114,9 +116,12 @@ function flashCard() {
     var Random = Math.floor(
       Math.random() * Object.keys(photoData.images).length
     );
+    const blob = new Blob([new Uint8Array(photoData.images[Random])], {
+      type: "image/jpeg",
+    });
     setPhotoUrl((prevState) => ({
       ...prevState,
-      [id]: photoData.images[Random],
+      [id]: URL.createObjectURL(blob),
     }));
     //}
   };
