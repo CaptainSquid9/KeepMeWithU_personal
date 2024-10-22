@@ -23,7 +23,7 @@ async function fetchFolder(folderId) {
   const files = response.data.files;
   if (files.length > 0) {
     return files.map(
-      (file) => `https://drive.google.com/thumbnail?id=${file.id}`
+      (file) => "https://drive.google.com/thumbnail?id=" + file.id
     );
   } else {
     return null;
