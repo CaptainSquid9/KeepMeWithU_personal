@@ -49,14 +49,28 @@ export default async function handler(req, res) {
       return;
     }
 
-    // Fetch the first photo as a stream (you can loop through all fileIds if needed)
-    const photoStream = await fetchPhoto(fileIds.map(fetchPhoto));
+    // Initialize an array to store image buffers
+    const images = [];
 
-    // Set response headers for image
-    res.setHeader("Content-Type", "image/jpeg");
+    // Loop through all file IDs and fetch their streams
+    for (const fileId of fileIds) {
+      const photoStream = await fetchPhoto(fileId);
 
-    // Pipe the stream to the response (sending the image binary data)
-    photoStream.pipe(res);
+      // Create a buffer to store the image data
+      const chunks = [];
+      for await (const chunk of photoStream) {
+        chunks.push(chunk);
+      }
+
+      // Combine chunks into a single buffer
+      const buffer = Buffer.concat(chunks);
+
+      // Convert the buffer to a base64 string for frontend use
+      const base64Image = buffer.toString("base64");
+
+      // Push the base64 image string into the array
+      images.push(`data:image/jpeg;base64,${base64Image}`);
+    }
   } catch (error) {
     console.error("Error fetching photo:", error);
     res.status(500).json({ error: "Error fetching photo" });
