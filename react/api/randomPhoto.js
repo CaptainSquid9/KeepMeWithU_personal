@@ -35,6 +35,12 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Allowed methods
   res.setHeader("Access-Control-Allow-Headers", "Content-Type"); // Allowed headers
 
+  // Handle OPTIONS request (CORS preflight)
+  if (req.method === "OPTIONS") {
+    res.status(200).end(); // End the preflight request
+    return;
+  }
+
   try {
     const fileIds = await fetchFolder(folderId);
 
