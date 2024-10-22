@@ -1,5 +1,4 @@
 const { google } = require("googleapis");
-const { PassThrough } = require("stream");
 
 var Time = new Date().getHours();
 const folderId = "1-1S1b2VKJCPx8pkzd5Nn0kY2u74xJ9P4";
@@ -31,34 +30,17 @@ async function fetchFolder(folderId) {
   }
 }
 
-// Immediately Invoked Async Function
-(async () => {
+export default async function handler(req, res) {
   try {
     const fileIds = await fetchFolder(folderId);
+
     if (!fileIds || fileIds.length === 0) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ error: "No photos found" }),
-      };
+      res.status(404).json({ error: "No photos found" });
     } else {
-      return {
-        body: JSON.stringify({
-          images: fileIds, // Array of images
-        }),
-      };
+      res.status(200).json({ images: fileIds });
     }
   } catch (error) {
-    console.error("Error fetching photo:", error);
-    return {
-      statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: "Error fetching photo",
-    };
+    console.error("Error fetching photos:", error);
+    res.status(500).json({ error: "Error fetching photos" });
   }
-})();
+}
