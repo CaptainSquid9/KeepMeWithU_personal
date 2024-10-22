@@ -10,9 +10,6 @@ type BoolsObject = {
 type StringObject = {
   [key: string]: string; // This allows indexing with numbers
 };
-interface PhotoData {
-  images: Array<ArrayBuffer>;
-}
 var LoadedInternal = -1;
 
 var CounterOut: ValuesObject;
@@ -88,15 +85,11 @@ function flashCard() {
   // Called by every layer
 
   const fetchPhotos = async () => {
-    const response = await fetch(`/api/randomPhoto`, {
-      method: "GET", // or 'POST' depending on your API design
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch("/api/randomPhoto");
 
+    // Convert the response to a blob (binary data)
     const photoData = await response.json();
-    console.log(photoData);
+    // Create a Blob URL from the blob
     if (response.ok) {
       for (var i = 0; i < Layers; i++) {
         // Convert the ArrayBuffer to a Blob
@@ -107,21 +100,16 @@ function flashCard() {
     }
   };
 
-  const getRandomPhoto = async (id: string, photoData: PhotoData) => {
+  const getRandomPhoto = async (id: string, photoData: Array<string>) => {
     //console.log(folderId);
     //if (Time > 10 && Time < 21) {
     console.log("Function called");
 
-    var Random = Math.floor(
-      Math.random() * Object.keys(photoData.images).length
-    );
-    console.log(photoData.images[Random]);
-    const blob = new Blob([new Uint8Array(photoData.images[Random])], {
-      type: "image/jpeg",
-    });
+    var Random = Math.floor(Math.random() * Object.keys(photoData).length);
+    console.log(photoData[Random]);
     setPhotoUrl((prevState) => ({
       ...prevState,
-      [id]: URL.createObjectURL(blob),
+      [id]: photoData[Random],
     }));
     //}
   };
