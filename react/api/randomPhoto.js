@@ -1,5 +1,5 @@
 const { google } = require("googleapis");
-
+const folderId = "1-1S1b2VKJCPx8pkzd5Nn0kY2u74xJ9P4";
 const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
 const jwtClient = new google.auth.JWT(
   credentials.client_email,
@@ -38,8 +38,6 @@ export default async function handler(req, res) {
     res.status(200).end();
     return;
   }
-
-  const folderId = "1-1S1b2VKJCPx8pkzd5Nn0kY2u74xJ9P4";
 
   try {
     const fileIds = await fetchFolder(folderId);
