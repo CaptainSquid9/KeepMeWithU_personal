@@ -1,5 +1,4 @@
 const { google } = require("googleapis");
-const { PassThrough } = require("stream");
 
 const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
 const jwtClient = new google.auth.JWT(
@@ -24,11 +23,10 @@ async function fetchPhoto(fileId) {
   const drive = google.drive({ version: "v3", auth: jwtClient });
   const response = await drive.files.get(
     { fileId, alt: "media" },
-    { responseType: "arraybuffer" }
+    { responseType: "stream" } // Change to stream to handle binary data
   );
 
-  // Return the raw ArrayBuffer from the file
-  return response.data;
+  return response.data; // Return the readable stream
 }
 
 export default async function handler(req, res) {
@@ -51,10 +49,14 @@ export default async function handler(req, res) {
       return;
     }
 
-    // Fetch the ArrayBuffer data for each file
-    const buffers = await Promise.all(fileIds.map(fetchPhoto));
+    // Fetch the first photo as a stream (you can loop through all fileIds if needed)
+    const photoStream = await fetchPhoto(fileIds.map(fetchPhoto));
 
-    res.status(200).json({ images: buffers });
+    // Set response headers for image
+    res.setHeader("Content-Type", "image/jpeg");
+
+    // Pipe the stream to the response (sending the image binary data)
+    photoStream.pipe(res);
   } catch (error) {
     console.error("Error fetching photo:", error);
     res.status(500).json({ error: "Error fetching photo" });
