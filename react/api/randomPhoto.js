@@ -31,6 +31,10 @@ async function fetchFolder(folderId) {
 }
 
 export default async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow any origin
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Allowed methods
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type"); // Allowed headers
+
   try {
     const fileIds = await fetchFolder(folderId);
 
