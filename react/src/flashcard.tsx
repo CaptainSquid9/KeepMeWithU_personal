@@ -11,9 +11,7 @@ type StringObject = {
   [key: string]: string; // This allows indexing with numbers
 };
 interface PhotoData {
-  images: {
-    url: string;
-  };
+  images: string;
 }
 var LoadedInternal = -1;
 
@@ -112,7 +110,7 @@ function flashCard() {
     );
     setPhotoUrl((prevState) => ({
       ...prevState,
-      [id]: photoData.images.url[Random],
+      [id]: photoData.images[Random],
     }));
     //}
   };
