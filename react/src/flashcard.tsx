@@ -107,7 +107,9 @@ function flashCard() {
     //if (Time > 10 && Time < 21) {
     console.log("Function called");
 
-    var Random = Math.random() * Object.keys(photoData.images).length;
+    var Random = Math.floor(
+      Math.random() * Object.keys(photoData.images).length
+    );
     setPhotoUrl((prevState) => ({
       ...prevState,
       [id]: photoData.images.url[Random],
