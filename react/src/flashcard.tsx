@@ -116,6 +116,7 @@ function flashCard() {
     var Random = Math.floor(
       Math.random() * Object.keys(photoData.images).length
     );
+    console.log(photoData.images[Random]);
     const blob = new Blob([new Uint8Array(photoData.images[Random])], {
       type: "image/jpeg",
     });
