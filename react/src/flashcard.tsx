@@ -93,7 +93,6 @@ function flashCard() {
     if (response.ok) {
       const photoData = await response.json();
       console.log(photoData);
-      const imageUrl = photoData.image;
       setPhotoUrl((prevState) => ({ ...prevState, [id]: imageUrl }));
     } else {
       console.error("Error fetching photo", response.statusText);

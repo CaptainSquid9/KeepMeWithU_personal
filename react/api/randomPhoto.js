@@ -23,41 +23,11 @@ async function fetchFolder(folderId) {
 
   const files = response.data.files;
   if (files.length > 0) {
-    return files.map((file) => file.id); // Collect all file IDs
-  }
-  return null;
-}
-
-async function fetchPhoto(fileIds) {
-  for (const fileId of fileIds) {
-    const drive = google.drive({ version: "v3", auth: jwtClient });
-    const response = await drive.files.get(
-      { fileId, alt: "media" },
-      { responseType: "stream" }
+    return files.map(
+      (file) => `https://drive.google.com/thumbnail?id=${file.id}`
     );
-
-    const bufferStream = new PassThrough();
-    response.data.pipe(bufferStream);
-
-    const chunks = [];
-    const base64Image = await new Promise((resolve, reject) => {
-      bufferStream.on("data", (chunk) => {
-        chunks.push(chunk);
-      });
-      bufferStream.on("end", () => {
-        const responseBuffer = Buffer.concat(chunks);
-        const base64Image = responseBuffer.toString("base64");
-        resolve(`data:image/jpeg;base64,${base64Image}`);
-      });
-
-      bufferStream.on("error", (err) => {
-        console.error("Error", err);
-        reject(err); // Reject in case of error
-      });
-    });
-
-    // Add the base64 image result to the array
-    imageResults.push(base64Image);
+  } else {
+    return null;
   }
 }
 
@@ -75,10 +45,9 @@ async function fetchPhoto(fileIds) {
         body: JSON.stringify({ error: "No photos found" }),
       };
     } else {
-      const imageResults = await fetchPhoto(fileIds);
       console.log({
         body: JSON.stringify({
-          images: imageResults, // Array of images
+          images: fileIds, // Array of images
         }),
       });
     }
