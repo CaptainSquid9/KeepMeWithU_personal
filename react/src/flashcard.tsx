@@ -89,7 +89,13 @@ function flashCard() {
   // Called by every layer
 
   const fetchPhotos = async () => {
-    const response = await fetch(`/api/randomPhoto`);
+    const response = await fetch(`/api/randomPhoto`, {
+      method: "GET", // or 'POST' depending on your API design
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
     photoData = await response.json();
     console.log(photoData);
     if (response.ok) {
