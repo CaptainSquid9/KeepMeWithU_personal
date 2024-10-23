@@ -117,12 +117,17 @@ function flashCard() {
       Math.random() * Object.keys(photoData.images).length
     );
     console.log(photoData.images[Random]);
-    const blob = new Blob([new Uint8Array(photoData.images[Random])], {
-      type: "image/jpeg",
-    });
+
+    var binary = "";
+    var bytes = new Uint8Array(photoData.images[Random]);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+
     setPhotoUrl((prevState) => ({
       ...prevState,
-      [id]: URL.createObjectURL(blob),
+      [id]: binary,
     }));
     //}
   };
