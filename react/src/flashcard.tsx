@@ -86,9 +86,10 @@ function flashCard() {
 
   const fetchPhotos = async () => {
     const response = await fetch("/api/randomPhoto");
-
+    console.log(response);
     // Convert the response to a blob (binary data)
     const photoData = await response.json();
+    console.log(photoData);
     // Create a Blob URL from the blob
     if (response.ok) {
       for (var i = 0; i < Layers; i++) {

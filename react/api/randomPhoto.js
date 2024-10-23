@@ -48,9 +48,9 @@ export default async function handler(req, res) {
       return;
     }
     for (var fileId in fileIds) {
-      const fileObj = fetchPhoto(fileId);
-      const fileData = fs.readFileSync(fileObj);
-      images.push(fileData.toString("base64"));
+      const fileObj = await fetchPhoto(fileId);
+      // const fileData = fs.readFileSync(fileObj);
+      images.push(fileObj);
     }
     // Return all images as base64 encoded strings
     res.status(200).json({ images });
