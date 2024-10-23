@@ -1,7 +1,4 @@
-import { blob } from "stream/consumers";
-
 const { google } = require("googleapis");
-const { PassThrough } = require("stream");
 
 const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
 const jwtClient = new google.auth.JWT(
@@ -30,7 +27,7 @@ async function fetchPhoto(fileId) {
   );
 
   // Return the raw ArrayBuffer from the file
-  return response.data;
+  return response;
 }
 
 export default async function handler(req, res) {
