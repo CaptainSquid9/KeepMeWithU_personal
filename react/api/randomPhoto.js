@@ -49,7 +49,7 @@ export default async function handler(req, res) {
       res.status(404).json({ error: "No photos found" });
       return;
     }
-    var blobs = [];
+    var blobs;
     // Fetch the ArrayBuffer data for each file
     for (var fileId in fileIds) {
       const photoFile = await fetchPhoto(fileId);
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
         res.status(404).json({ error: "Empty object found" });
         return;
       }
-      blobs.push(photoFile);
+      blobs = photoFile;
     }
     res.status(200).json({ images: blobs });
   } catch (error) {
