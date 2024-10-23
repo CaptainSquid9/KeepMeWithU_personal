@@ -52,9 +52,11 @@ export default async function handler(req, res) {
       res.status(404).json({ error: "No photos found" });
       return;
     }
-
+    var blobs = [];
     // Fetch the ArrayBuffer data for each file
-    const blobs = await Promise.all(fileIds.map(fetchPhoto));
+    for (var fileId in fileIds) {
+      blobs.push(fetchPhoto(fileId));
+    }
     if (!blobs || blobs.length === 0) {
       res.status(404).json({ error: "No blobs found" });
       return;
