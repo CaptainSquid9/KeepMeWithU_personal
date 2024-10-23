@@ -1,5 +1,3 @@
-import { file } from "googleapis/build/src/apis/file";
-
 const { google } = require("googleapis");
 const fs = require("fs");
 
@@ -49,8 +47,9 @@ export default async function handler(req, res) {
       res.status(404).json({ error: "No photos found" });
       return;
     }
-    for (fileId in fileIds) {
-      const fileData = fs.readFileSync(fileId);
+    for (var fileId in fileIds) {
+      const fileObj = fetchPhoto(fileId);
+      const fileData = fs.readFileSync(fileObj);
       images.push(fileData.toString("base64"));
     }
     // Return all images as base64 encoded strings
