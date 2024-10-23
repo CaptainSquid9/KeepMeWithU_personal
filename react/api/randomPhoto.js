@@ -29,7 +29,14 @@ async function fetchPhoto(fileId) {
   // Return the raw ArrayBuffer from the file
   return response.data;
 }
-
+async function blobToDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob); // Converts blob to Base64 data URL
+  });
+}
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -49,7 +56,7 @@ export default async function handler(req, res) {
       res.status(404).json({ error: "No photos found" });
       return;
     }
-    var blobs;
+    var blobs = [];
     // Fetch the ArrayBuffer data for each file
     for (var fileId in fileIds) {
       const photoFile = await fetchPhoto(fileId);
@@ -57,7 +64,8 @@ export default async function handler(req, res) {
         res.status(404).json({ error: "Empty object found" });
         return;
       }
-      blobs = photoFile;
+      const blob = await blobToDataUrl(photoFile);
+      blobs.push(blob);
     }
     res.status(200).json({ images: blobs });
   } catch (error) {
