@@ -1,9 +1,7 @@
 const { google } = require("googleapis");
-const fs = require("fs");
+const { PassThrough } = require("stream");
 
-const folderId = "1-1S1b2VKJCPx8pkzd5Nn0kY2u74xJ9P4";
 const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
-
 const jwtClient = new google.auth.JWT(
   credentials.client_email,
   null,
@@ -19,14 +17,18 @@ async function fetchFolder(folderId) {
   });
 
   const files = response.data.files;
-  return files.map((file) => file.id); // Return the file IDs
+  return files.map((file) => file.id);
 }
 
 async function fetchPhoto(fileId) {
   const drive = google.drive({ version: "v3", auth: jwtClient });
-  const response = await drive.files.get({ fileId, alt: "media" });
+  const response = await drive.files.get(
+    { fileId, alt: "media" },
+    { responseType: "arraybuffer" }
+  );
 
-  return response.data; // Return the stream
+  // Return the raw ArrayBuffer from the file
+  return response.data;
 }
 
 export default async function handler(req, res) {
@@ -39,23 +41,22 @@ export default async function handler(req, res) {
     return;
   }
 
+  const folderId = "1-1S1b2VKJCPx8pkzd5Nn0kY2u74xJ9P4";
+
   try {
     const fileIds = await fetchFolder(folderId);
-    const images = [];
 
     if (!fileIds || fileIds.length === 0) {
       res.status(404).json({ error: "No photos found" });
       return;
     }
-    for (var fileId in fileIds) {
-      const fileObj = await fetchPhoto(fileId);
-      // const fileData = fs.readFileSync(fileObj);
-      images.push(fileObj);
-    }
-    // Return all images as base64 encoded strings
-    res.status(200).json({ images });
+
+    // Fetch the ArrayBuffer data for each file
+    const buffers = await Promise.all(fileIds.map(fetchPhoto));
+
+    res.status(200).json({ images: buffers });
   } catch (error) {
-    console.error("Error fetching photos:", error);
-    res.status(500).json({ error: "Error fetching photos" });
+    console.error("Error fetching photo:", error);
+    res.status(500).json({ error: "Error fetching photo" });
   }
 }

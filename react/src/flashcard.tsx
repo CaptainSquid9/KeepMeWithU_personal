@@ -10,11 +10,15 @@ type BoolsObject = {
 type StringObject = {
   [key: string]: string; // This allows indexing with numbers
 };
+interface PhotoData {
+  images: Array<ArrayBuffer>;
+}
 var LoadedInternal = -1;
 
 var CounterOut: ValuesObject;
 function flashCard() {
   var Time: number;
+  var photoData: PhotoData;
   Time = new Date().getHours();
 
   var Timer: NodeJS.Timeout | undefined;
@@ -85,32 +89,40 @@ function flashCard() {
   // Called by every layer
 
   const fetchPhotos = async () => {
-    const response = await fetch("/api/randomPhoto");
-    console.log(response);
-    // Convert the response to a blob (binary data)
-    const photoData = await response.json();
+    const response = await fetch(`/api/randomPhoto`, {
+      method: "GET", // or 'POST' depending on your API design
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    photoData = await response.json();
     console.log(photoData);
-    // Create a Blob URL from the blob
     if (response.ok) {
       for (var i = 0; i < Layers; i++) {
         // Convert the ArrayBuffer to a Blob
-        getRandomPhoto(i.toString(), photoData);
+        getRandomPhoto(i.toString());
       }
     } else {
       console.error("Error fetching photo", response.statusText);
     }
   };
 
-  const getRandomPhoto = async (id: string, photoData: Array<string>) => {
+  const getRandomPhoto = async (id: string) => {
     //console.log(folderId);
     //if (Time > 10 && Time < 21) {
     console.log("Function called");
 
-    var Random = Math.floor(Math.random() * Object.keys(photoData).length);
-    console.log(photoData[Random]);
+    var Random = Math.floor(
+      Math.random() * Object.keys(photoData.images).length
+    );
+    console.log(photoData.images[Random]);
+    const blob = new Blob([new Uint8Array(photoData.images[Random])], {
+      type: "image/jpeg",
+    });
     setPhotoUrl((prevState) => ({
       ...prevState,
-      [id]: photoData[Random],
+      [id]: URL.createObjectURL(blob),
     }));
     //}
   };
