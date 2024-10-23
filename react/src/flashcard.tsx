@@ -11,7 +11,7 @@ type StringObject = {
   [key: string]: string; // This allows indexing with numbers
 };
 interface PhotoData {
-  images: Array<ArrayBuffer>;
+  images: Array<Blob>;
 }
 var LoadedInternal = -1;
 
@@ -118,16 +118,9 @@ function flashCard() {
     );
     console.log(photoData.images[Random]);
 
-    var binary = "";
-    var bytes = new Uint8Array(photoData.images[Random]);
-    var len = bytes.byteLength;
-    for (var i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-
     setPhotoUrl((prevState) => ({
       ...prevState,
-      [id]: binary,
+      [id]: photoData.images[Random].toString(),
     }));
     //}
   };

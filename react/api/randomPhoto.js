@@ -24,7 +24,7 @@ async function fetchPhoto(fileId) {
   const drive = google.drive({ version: "v3", auth: jwtClient });
   const response = await drive.files.get(
     { fileId, alt: "media" },
-    { responseType: "arraybuffer" }
+    { responseType: "blob" }
   );
 
   // Return the raw ArrayBuffer from the file
@@ -52,9 +52,9 @@ export default async function handler(req, res) {
     }
 
     // Fetch the ArrayBuffer data for each file
-    const buffers = await Promise.all(fileIds.map(fetchPhoto));
+    const blobs = await Promise.all(fileIds.map(fetchPhoto));
 
-    res.status(200).json({ images: buffers });
+    res.status(200).json({ images: blobs });
   } catch (error) {
     console.error("Error fetching photo:", error);
     res.status(500).json({ error: "Error fetching photo" });
