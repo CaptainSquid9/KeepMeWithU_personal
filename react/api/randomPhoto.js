@@ -53,11 +53,11 @@ export default async function handler(req, res) {
     // Fetch the ArrayBuffer data for each file
     for (var fileId in fileIds) {
       const photoFile = fetchPhoto(fileId);
+      if (!photoFile || Object.keys(photoFile).length === 0) {
+        res.status(404).json({ error: "Empty object found" });
+        return;
+      }
       blobs.push(photoFile);
-    }
-    if (!blobs || blobs.length === 0) {
-      res.status(404).json({ error: "No blobs found" });
-      return;
     }
     res.status(200).json({ images: blobs });
   } catch (error) {
