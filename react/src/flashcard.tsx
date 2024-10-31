@@ -90,11 +90,7 @@ function flashCard() {
   // Called by every layer
 
   const fetchPhotos = async () => {
-    const response = axios.create({
-      timeout: 30000, // milliseconds
-    });
-
-    response.get("/api/randomPhoto").then((response) => {
+    axios.get("/api/randomPhoto", { timeout: 30000 }).then((response) => {
       photoData = response.data;
       console.log(photoData);
 
