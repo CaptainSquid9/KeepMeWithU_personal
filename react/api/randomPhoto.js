@@ -55,12 +55,13 @@ export default async function handler(req, res) {
     }
 
     const images = [];
-
+    const RandomStartingPt = Math.floor(Math.random() * (files.length - 25));
     for (var i = 0; i < 25; i++) {
-      var photoBase64 = await fetchPhoto(files[i].id);
+      var photoBase64 = await fetchPhoto(files[RandomStartingPt + i].id);
       images.push(`data:image/jpeg;base64,${photoBase64}`);
     }
 
+    res.status(200).json({ images: images });
     return images;
   } catch (error) {
     console.error("Error fetching photo:", error);

@@ -11,12 +11,15 @@ type BoolsObject = {
 type StringObject = {
   [key: string]: string; // This allows indexing with numbers
 };
+interface PhotoData {
+  images: Array<string>;
+}
 var LoadedInternal = -1;
 
 var CounterOut: ValuesObject;
 function flashCard() {
   var Time: number;
-  var photoData: Array<string>;
+  var photoData: PhotoData;
   Time = new Date().getHours();
 
   var Timer: NodeJS.Timeout | undefined;
@@ -103,12 +106,12 @@ function flashCard() {
     //if (Time > 10 && Time < 21) {
     console.log("Function called");
 
-    var Random = Math.floor(Math.random() * photoData.length);
-    console.log(photoData[Random]);
+    var Random = Math.floor(Math.random() * Object.keys(photoData).length);
+    console.log(photoData.images[Random]);
 
     setPhotoUrl((prevState) => ({
       ...prevState,
-      [id]: photoData[Random].toString(),
+      [id]: photoData.images[Random].toString(),
     }));
   };
   useEffect(() => {
