@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./flashcard.css";
+import axios from "axios";
 
 type ValuesObject = {
   [key: string]: number; // This allows indexing with numbers
@@ -89,23 +90,19 @@ function flashCard() {
   // Called by every layer
 
   const fetchPhotos = async () => {
-    const response = await fetch(`/api/randomPhoto`, {
-      method: "GET", // or 'POST' depending on your API design
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const response = axios.create({
+      timeout: 30000, // milliseconds
     });
 
-    photoData = await response.json();
-    console.log(photoData);
-    if (response.ok) {
+    response.get("/api/randomPhoto").then((response) => {
+      photoData = response.data;
+      console.log(photoData);
+
       for (var i = 0; i < Layers; i++) {
         // Convert the ArrayBuffer to a Blob
         getRandomPhoto(i.toString());
       }
-    } else {
-      console.error("Error fetching photo", response.statusText);
-    }
+    });
   };
 
   const getRandomPhoto = async (id: string) => {
