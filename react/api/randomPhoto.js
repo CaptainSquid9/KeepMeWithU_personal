@@ -56,8 +56,8 @@ export default async function handler(req, res) {
 
     const images = [];
 
-    for (const file of files) {
-      const photoBase64 = await fetchPhoto(file.id);
+    for (var i = 0; i < 10; i++) {
+      const photoBase64 = await fetchPhoto(files[i].id);
       images.push(`data:image/jpeg;base64,${photoBase64}`);
     }
 
