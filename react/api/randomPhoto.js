@@ -49,7 +49,7 @@ export default async function handler(req, res) {
   try {
     const files = await fetchFolder(folderId);
 
-    if (!fileIds || fileIds.length === 0) {
+    if (!files || files.length === 0) {
       res.status(404).json({ error: "No photos found" });
       return;
     }
