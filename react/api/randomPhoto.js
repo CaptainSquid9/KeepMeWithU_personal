@@ -23,12 +23,7 @@ async function fetchPhoto(fileId) {
   const drive = google.drive({ version: "v3", auth: jwtClient });
   const response = await drive.files.get(
     { fileId, alt: "media" },
-    { responseType: "arraybuffer" },
-    function (err, { data }) {
-      fs.writeFile("sample.jpg", Buffer.from(data), (err) => {
-        if (err) console.log(err);
-      });
-    }
+    { responseType: "arraybuffer" }
   );
 
   // Return the raw ArrayBuffer from the file
