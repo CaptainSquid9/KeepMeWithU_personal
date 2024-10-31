@@ -54,6 +54,7 @@ export default async function handler(req, res) {
       return;
     }
 
+    res.status(404).json({ body: files });
     var buffers = [];
     // Fetch the ArrayBuffer data for each file
     for (var file in files) {
