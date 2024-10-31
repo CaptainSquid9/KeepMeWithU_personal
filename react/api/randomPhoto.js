@@ -19,10 +19,10 @@ async function fetchFolder(folderId) {
   return files;
 }
 
-async function fetchPhoto(fileId) {
+async function fetchPhoto(fileid) {
   const drive = google.drive({ version: "v3", auth: jwtClient });
   const response = await drive.files.get(
-    { fileId, alt: "media" },
+    { fileId: fileid, alt: "media" },
     { responseType: "arraybuffer" }
   );
 
@@ -54,7 +54,7 @@ export default async function handler(req, res) {
     for (const file of files) {
       const photoFile = await fetchPhoto(file.id);
       res.status(200).json({ body: photoFile });
-      if (!photoFile || Object.keys(photoFile).length === 0) {
+      if (!photoFile) {
         res.status(404).json({ error: "Empty object found" });
         return;
       }
