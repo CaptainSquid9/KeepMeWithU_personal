@@ -53,6 +53,7 @@ export default async function handler(req, res) {
       res.status(404).json({ error: "No photos found" });
       return;
     }
+    res.status(404).json({ body: "Folder fetched" + fileIds });
     var buffers = [];
     // Fetch the ArrayBuffer data for each file
     for (var fileId in fileIds) {
