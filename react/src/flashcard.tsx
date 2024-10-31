@@ -11,7 +11,7 @@ type StringObject = {
   [key: string]: string; // This allows indexing with numbers
 };
 interface PhotoData {
-  images: Array<Blob>;
+  images: Array<string>;
 }
 var LoadedInternal = -1;
 
@@ -113,16 +113,14 @@ function flashCard() {
     //if (Time > 10 && Time < 21) {
     console.log("Function called");
 
-    var Random = Math.floor(
-      Math.random() * Object.keys(photoData.images).length
-    );
+    /**  var Random = Math.floor(Math.random() * photoData.length);
     console.log(photoData.images[Random]);
 
     setPhotoUrl((prevState) => ({
       ...prevState,
       [id]: photoData.images[Random].toString(),
     }));
-    //}
+    */
   };
   useEffect(() => {
     if (start_check == false) {
