@@ -52,7 +52,7 @@ export default async function handler(req, res) {
     var buffers = [];
     // Fetch the ArrayBuffer data for each file
     for (const file of files) {
-      const photoFile = await fetchPhoto(file.id);
+      const photoFile = await fetchPhoto(file.id.toString());
       if (!photoFile) {
         res.status(404).json({ error: "Empty object found" });
         return;
