@@ -47,17 +47,18 @@ export default async function handler(req, res) {
   const folderId = "1-1S1b2VKJCPx8pkzd5Nn0kY2u74xJ9P4";
 
   try {
-    const fileIds = await fetchFolder(folderId);
+    const files = await fetchFolder(folderId);
 
     if (!fileIds || fileIds.length === 0) {
       res.status(404).json({ error: "No photos found" });
       return;
     }
-    res.status(404).json({ body: "Folder fetched" + fileIds });
+
     var buffers = [];
     // Fetch the ArrayBuffer data for each file
-    for (var fileId in fileIds) {
-      const photoFile = await fetchPhoto(fileId.id);
+    for (var file in files) {
+      res.status(404).json({ body: file.id });
+      const photoFile = await fetchPhoto(file.id);
       if (!photoFile || Object.keys(photoFile).length === 0) {
         res.status(404).json({ error: "Empty object found" });
         return;
