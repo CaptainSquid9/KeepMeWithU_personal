@@ -25,8 +25,13 @@ async function fetchPhoto(fileId) {
     { fileId, alt: "media" },
     { responseType: "stream" }
   );
-
-  return response.data; // Return the raw ArrayBuffer from the file
+  // Convert the stream to a base64 string
+  const chunks = [];
+  for await (const chunk of response.data) {
+    chunks.push(chunk);
+  }
+  const buffer = Buffer.concat(chunks);
+  return buffer.toString("base64");
 }
 
 export default async function handler(req, res) {
@@ -49,18 +54,14 @@ export default async function handler(req, res) {
       return;
     }
 
-    var buffers = [];
-    // Fetch the ArrayBuffer data for each file
+    const images = [];
+
     for (const file of files) {
-      const photoFile = await fetchPhoto(file.id);
-      res.status(404).json({ body: photoFile });
-      if (!photoFile) {
-        res.status(404).json({ error: "Empty object found" });
-        return;
-      }
-      buffers.push(photoFile);
+      const photoBase64 = await fetchPhoto(file.id);
+      images.push(`data:image/jpeg;base64,${photoBase64}`);
     }
-    res.status(200).json({ images: buffers });
+
+    res.status(200).json({ images });
   } catch (error) {
     console.error("Error fetching photo:", error);
     res.status(500).json({ error: "Error fetching photo" });
