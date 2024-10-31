@@ -56,7 +56,7 @@ export default async function handler(req, res) {
 
     var buffers = [];
     // Fetch the ArrayBuffer data for each file
-    for (const file in files) {
+    for (const file of files) {
       res.status(404).json({ body: file.id });
       const photoFile = await fetchPhoto(file.id);
       if (!photoFile || Object.keys(photoFile).length === 0) {
