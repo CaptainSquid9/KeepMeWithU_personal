@@ -16,7 +16,7 @@ async function fetchFolder(folderId) {
   });
 
   const files = response.data.files;
-  return files.map((file) => file.id);
+  return files;
 }
 
 async function fetchPhoto(fileId) {
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
     var buffers = [];
     // Fetch the ArrayBuffer data for each file
     for (var fileId in fileIds) {
-      const photoFile = await fetchPhoto(fileId);
+      const photoFile = await fetchPhoto(fileId.id);
       if (!photoFile || Object.keys(photoFile).length === 0) {
         res.status(404).json({ error: "Empty object found" });
         return;
