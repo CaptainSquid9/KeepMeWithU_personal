@@ -61,8 +61,7 @@ export default async function handler(req, res) {
         res.status(404).json({ error: "Empty object found" });
         return;
       }
-      const arraybuffer = await blobToDataUrl(photoFile);
-      buffers.push(arraybuffer);
+      buffers.push(photoFile);
     }
     res.status(200).json({ images: buffers });
   } catch (error) {
