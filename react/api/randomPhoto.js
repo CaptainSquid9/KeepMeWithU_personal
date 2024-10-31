@@ -23,19 +23,16 @@ async function fetchPhoto(fileId) {
   const drive = google.drive({ version: "v3", auth: jwtClient });
   const response = await drive.files.get(
     { fileId, alt: "media" },
-    { responseType: "blob" }
+    { responseType: "arraybuffer" },
+    function (err, { data }) {
+      fs.writeFile("sample.jpg", Buffer.from(data), (err) => {
+        if (err) console.log(err);
+      });
+    }
   );
 
   // Return the raw ArrayBuffer from the file
   return response.data;
-}
-async function blobToDataUrl(blob) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(blob); // Converts blob to Base64 data URL
-  });
 }
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -56,7 +53,7 @@ export default async function handler(req, res) {
       res.status(404).json({ error: "No photos found" });
       return;
     }
-    var blobs = [];
+    var buffers = [];
     // Fetch the ArrayBuffer data for each file
     for (var fileId in fileIds) {
       const photoFile = await fetchPhoto(fileId);
@@ -64,10 +61,10 @@ export default async function handler(req, res) {
         res.status(404).json({ error: "Empty object found" });
         return;
       }
-      const blob = await blobToDataUrl(photoFile);
-      blobs.push(blob);
+      const arraybuffer = await blobToDataUrl(photoFile);
+      buffers.push(arraybuffer);
     }
-    res.status(200).json({ images: blobs });
+    res.status(200).json({ images: buffers });
   } catch (error) {
     console.error("Error fetching photo:", error);
     res.status(500).json({ error: "Error fetching photo" });
