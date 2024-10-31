@@ -20,14 +20,15 @@ async function fetchFolder(folderId) {
 }
 
 async function fetchPhoto(fileId) {
-  const drive = google.drive({ version: "v3", auth: jwtClient });
-  const response = await drive.files.get(
-    { fileId, alt: "media" },
-    { responseType: "arraybuffer" }
-  );
+  try {
+    const drive = google.drive({ version: "v3", auth: jwtClient });
+    const response = await drive.files.get(
+      { fileId, alt: "media" },
+      { responseType: "arraybuffer" }
+    );
 
-  // Return the raw ArrayBuffer from the file
-  return response.data;
+    return response.data; // Return the raw ArrayBuffer from the file
+  }
 }
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -52,7 +53,8 @@ export default async function handler(req, res) {
     var buffers = [];
     // Fetch the ArrayBuffer data for each file
     for (const file of files) {
-      const photoFile = await fetchPhoto(file.id.toString());
+      const photoFile = await fetchPhoto(file.id);
+      res.status(404).json({ body: photoFile })
       if (!photoFile) {
         res.status(404).json({ error: "Empty object found" });
         return;
