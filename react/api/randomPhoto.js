@@ -56,12 +56,14 @@ export default async function handler(req, res) {
 
     const images = [];
 
-    for (var i = 0; i < 10; i++) {
-      const photoBase64 = await fetchPhoto(files[i].id);
+    for (const file of files) {
+      const photoBase64 = await fetchPhoto(file.id);
+      res.status(201).json({ body: photoBase64 });
       images.push(`data:image/jpeg;base64,${photoBase64}`);
     }
 
     res.status(200).json({ body: images });
+    return images;
   } catch (error) {
     console.error("Error fetching photo:", error);
     res.status(500).json({ error: "Error fetching photo" });
