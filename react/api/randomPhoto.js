@@ -61,8 +61,7 @@ export default async function handler(req, res) {
       images.push(`data:image/jpeg;base64,${photoBase64}`);
     }
 
-    res.status(200).json({ images: images });
-    return images;
+    res.status(200).send(images);
   } catch (error) {
     console.error("Error fetching photo:", error);
     res.status(500).json({ error: "Error fetching photo" });
