@@ -17,7 +17,6 @@ var CounterOut: ValuesObject;
 function flashCard() {
   var Time: number;
   var photoData: Array<string>;
-  var pdlength: Number;
   Time = new Date().getHours();
 
   var Timer: NodeJS.Timeout | undefined;
@@ -86,25 +85,26 @@ function flashCard() {
 
   //Random photo
   // Called by every layer
-  const fetchPhotos = async () => {
+  function fetchPhoto(): Array<string> {
     axios.get("/api/randomPhoto").then((response) => {
       photoData = response.data;
-      pdlength = photoData.length;
       console.log(photoData);
 
       for (var i = 0; i < Layers; i++) {
         // Convert the ArrayBuffer to a Blob
         getRandomPhoto(i.toString());
       }
+      return photoData;
     });
-  };
+    return [];
+  }
 
   const getRandomPhoto = async (id: string) => {
     //console.log(folderId);
     //if (Time > 10 && Time < 21) {
     console.log("Function called" + photoData.length);
 
-    var Random = Math.floor(Math.random() * pdlength);
+    var Random = Math.floor(Math.random() * photoData.length);
     console.log(photoData[Random]);
 
     setPhotoUrl((prevState) => ({
@@ -115,7 +115,7 @@ function flashCard() {
   useEffect(() => {
     if (start_check == false) {
       start_check = true;
-      fetchPhotos();
+      photoData = fetchPhoto();
     }
   }, []);
   //Swipe animations
