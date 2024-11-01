@@ -163,7 +163,6 @@ function flashCard() {
         AllowSlide = true;
         clearInterval(SlideInterval);
         setSwipedBool((prevState) => ({ ...prevState, [StrID]: false }));
-        getRandomPhoto(StrID);
         setCounterOut((prevState) => ({
           ...prevState,
           [StrID]: CounterOut[id] - Layers,
