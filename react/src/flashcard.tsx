@@ -47,7 +47,7 @@ function flashCard() {
     setLoadedPictures(LoadedPictures + 1);
     LoadedInternal += 1;
     //console.log(`Loaded pictures: ${LoadedPictures}, ${LoadedInternal}`);
-    if (LoadedInternal == Layers) {
+    if (LoadedInternal == Layers - 1) {
       setAllow(true);
       AllowSlide = true;
       Timer = setTimeout(() => {
