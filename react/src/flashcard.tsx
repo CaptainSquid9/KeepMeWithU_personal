@@ -11,7 +11,6 @@ type BoolsObject = {
 type StringObject = {
   [key: string]: string; // This allows indexing with numbers
 };
-var CounterOut: ValuesObject;
 var LoadedInternal = -1;
 function flashCard() {
   var Time: number;
@@ -156,7 +155,7 @@ function flashCard() {
         clearInterval(SlideInterval);
         setSwipedBool((prevState) => ({ ...prevState, [StrID]: false }));
         getRandomPhoto(StrID);
-        const newCounter = CounterOut[id] - Layers;
+        const newCounter = Counter[id] - Layers;
         setCounter((prevState) => ({
           ...prevState,
           [StrID]: newCounter,
