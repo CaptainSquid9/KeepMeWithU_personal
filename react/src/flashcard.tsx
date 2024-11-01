@@ -165,7 +165,8 @@ function flashCard() {
           ...prevState,
           [StrID]: CounterOut[id] - Layers,
         }));
-        CounterOut = { ...CounterOut, [StrID]: CounterOut[id] - Layers };
+        console.log(CounterOut[id] - Layers);
+        CounterOut[id] = CounterOut[id] - Layers;
       }, 1000);
       console.log(`Updated: ${CounterOut[id]}`);
       // console.log(`Updated: ${CounterOut[id]}`);
