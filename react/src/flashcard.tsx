@@ -73,8 +73,7 @@ function flashCard() {
         ...prevState,
         [strElem]: 214748364 - elem,
       }));
-      CounterOut = { ...CounterOut, [strElem]: 214748364 - elem };
-      console.log(CounterOut);
+      console.log(Counter);
       // All images have been loaded: ALlow touch
     }
     //  }
@@ -91,7 +90,6 @@ function flashCard() {
         // Convert the ArrayBuffer to a Blob
         getRandomPhotoS(i.toString());
       }
-      photoData;
     });
   };
 
@@ -158,14 +156,14 @@ function flashCard() {
         clearInterval(SlideInterval);
         setSwipedBool((prevState) => ({ ...prevState, [StrID]: false }));
         getRandomPhoto(StrID);
+        const newCounter = CounterOut[id] - Layers;
         setCounter((prevState) => ({
           ...prevState,
-          [StrID]: CounterOut[id] - Layers,
+          [StrID]: newCounter,
         }));
-        console.log(CounterOut[id] - Layers);
-        CounterOut[id] = CounterOut[id] - Layers;
+        console.log(newCounter);
       }, 1000);
-      console.log(`Updated: ${CounterOut[id]}`);
+      console.log(`Updated: ${Counter[id]}`);
       // console.log(`Updated: ${CounterOut[id]}`);
     }
   }
