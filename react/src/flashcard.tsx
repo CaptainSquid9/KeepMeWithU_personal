@@ -183,6 +183,9 @@ function flashCard() {
             onMouseUp={() => {
               setMDBool(false), Swipe(i, false), console.log("Mouse up");
             }}
+            onLoad={() => {
+              Start(i);
+            }}
             style={{ top: divY[i], left: divX[i], zIndex: Counter[i] }}
           >
             <div
@@ -200,9 +203,6 @@ function flashCard() {
               width={window.innerWidth}
               height={window.innerHeight}
               draggable="false"
-              onLoad={() => {
-                Start(i);
-              }}
               onChange={() => {
                 Swipe(i, true);
               }}
