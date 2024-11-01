@@ -11,6 +11,7 @@ type BoolsObject = {
 type StringObject = {
   [key: string]: string; // This allows indexing with numbers
 };
+var CounterOut: ValuesObject;
 var LoadedInternal = -1;
 function flashCard() {
   var Time: number;
@@ -38,7 +39,9 @@ function flashCard() {
   //Bool checking if swiped for each layer
   const [SwipedBool, setSwipedBool] = useState<BoolsObject>({});
   //Z-index counter for each layer
-  var Counter: ValuesObject;
+  const [Counter, setCounter] = useState<ValuesObject>({});
+
+  const setCounterOut = setCounter;
 
   // Fetch random photo for each layer
   const [photoUrl, setPhotoUrl] = useState<StringObject>({});
@@ -69,7 +72,12 @@ function flashCard() {
         [strElem]: window.innerHeight / 2,
       }));
       setSwipedBool((prevState) => ({ ...prevState, [strElem]: false }));
-      //console.log(CounterOut);
+      setCounterOut((prevState) => ({
+        ...prevState,
+        [strElem]: 214748364 - elem,
+      }));
+      CounterOut = { ...CounterOut, [strElem]: 214748364 - elem };
+      console.log(CounterOut);
       // All images have been loaded: ALlow touch
     }
     //  }
@@ -83,7 +91,6 @@ function flashCard() {
       setPhotoData(response.data);
       console.log(photodata, photoData);
       for (var i = 0; i < Layers; i++) {
-        Counter = { ...Counter, [i.toString()]: 214748364 - i };
         // Convert the ArrayBuffer to a Blob
         getRandomPhotoS(i.toString());
       }
@@ -154,8 +161,13 @@ function flashCard() {
         clearInterval(SlideInterval);
         setSwipedBool((prevState) => ({ ...prevState, [StrID]: false }));
         getRandomPhoto(StrID);
-        Counter = { ...Counter, [StrID]: 214748364 - Layers };
-      }, 2000);
+        setCounterOut((prevState) => ({
+          ...prevState,
+          [StrID]: CounterOut[id] - Layers,
+        }));
+        CounterOut = { ...CounterOut, [StrID]: CounterOut[id] - Layers };
+      }, 1000);
+      console.log(`Updated: ${CounterOut[id]}`);
       // console.log(`Updated: ${CounterOut[id]}`);
     }
   }
