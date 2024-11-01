@@ -40,9 +40,6 @@ function flashCard() {
   const [SwipedBool, setSwipedBool] = useState<BoolsObject>({});
   //Z-index counter for each layer
   const [Counter, setCounter] = useState<ValuesObject>({});
-
-  const setCounterOut = setCounter;
-
   // Fetch random photo for each layer
   const [photoUrl, setPhotoUrl] = useState<StringObject>({});
 
@@ -72,7 +69,7 @@ function flashCard() {
         [strElem]: window.innerHeight / 2,
       }));
       setSwipedBool((prevState) => ({ ...prevState, [strElem]: false }));
-      setCounterOut((prevState) => ({
+      setCounter((prevState) => ({
         ...prevState,
         [strElem]: 214748364 - elem,
       }));
@@ -161,7 +158,7 @@ function flashCard() {
         clearInterval(SlideInterval);
         setSwipedBool((prevState) => ({ ...prevState, [StrID]: false }));
         getRandomPhoto(StrID);
-        setCounterOut((prevState) => ({
+        setCounter((prevState) => ({
           ...prevState,
           [StrID]: CounterOut[id] - Layers,
         }));
