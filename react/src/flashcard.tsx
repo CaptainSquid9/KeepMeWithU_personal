@@ -88,22 +88,20 @@ function flashCard() {
       photoData = response.data;
       for (var i = 0; i < Layers; i++) {
         // Convert the ArrayBuffer to a Blob
-        getRandomPhotoS(i.toString());
+        getRandomPhotoS(i);
       }
       photoData;
     });
   };
 
   //Get random photo start
-  const getRandomPhotoS = async (id: string) => {
+  const getRandomPhotoS = async (id: number) => {
     //console.log(folderId);
     //if (Time > 10 && Time < 21) {
 
-    var Random = Math.floor(Math.random() * photoData.length);
-
     setPhotoUrl((prevState) => ({
       ...prevState,
-      [id]: photoData[Random].toString(),
+      [id.toString()]: photoData[id].toString(),
     }));
   };
 
@@ -186,9 +184,6 @@ function flashCard() {
               width={window.innerWidth}
               height={window.innerHeight}
               draggable="false"
-              onChange={() => {
-                Swipe(i, true);
-              }}
             ></img>
           </div>
         );
