@@ -131,6 +131,9 @@ function flashCard() {
     if (start_check == false) {
       start_check = true;
       fetchPhoto();
+      for (var i = 0; i < Layers; i++) {
+        Start(i);
+      }
     }
   }, []);
   //Swipe animations
@@ -179,10 +182,6 @@ function flashCard() {
           <div
             id={i.toString()}
             className={`flashCardDiv ${SwipedBool[i] ? "FadeOut" : ""}`}
-            onLoad={() => {
-              Start(i);
-              console.log("OnLoad");
-            }}
             onMouseDown={() => {
               setMDBool(true),
                 clearTimeout(IdleTimer),
