@@ -12,8 +12,6 @@ type StringObject = {
   [key: string]: string; // This allows indexing with numbers
 };
 var LoadedInternal = -1;
-
-var CounterOut: ValuesObject = {};
 function flashCard() {
   var Time: number;
   var photoData: Array<string>;
@@ -40,7 +38,7 @@ function flashCard() {
   //Bool checking if swiped for each layer
   const [SwipedBool, setSwipedBool] = useState<BoolsObject>({});
   //Z-index counter for each layer
-  const [Counter, setCounter] = useState<ValuesObject>({});
+  var Counter: ValuesObject;
 
   // Fetch random photo for each layer
   const [photoUrl, setPhotoUrl] = useState<StringObject>({});
@@ -71,11 +69,7 @@ function flashCard() {
         [strElem]: window.innerHeight / 2,
       }));
       setSwipedBool((prevState) => ({ ...prevState, [strElem]: false }));
-      setCounter((prevState) => ({
-        ...prevState,
-        [strElem]: 214748364 - elem,
-      }));
-      CounterOut = { ...CounterOut, [strElem]: 214748364 - elem };
+      Counter = { ...Counter, [strElem]: 214748364 - elem };
       //console.log(CounterOut);
       // All images have been loaded: ALlow touch
     }
@@ -160,11 +154,7 @@ function flashCard() {
         clearInterval(SlideInterval);
         setSwipedBool((prevState) => ({ ...prevState, [StrID]: false }));
         getRandomPhoto(StrID);
-        setCounter((prevState) => ({
-          ...prevState,
-          [StrID]: Counter[id] - Layers,
-        }));
-        CounterOut = { ...CounterOut, [StrID]: CounterOut[id] - Layers };
+        Counter = { ...Counter, [StrID]: 214748364 - Layers };
       }, 2000);
       // console.log(`Updated: ${CounterOut[id]}`);
     }
@@ -186,7 +176,7 @@ function flashCard() {
             onMouseUp={() => {
               setMDBool(false), Swipe(i, false), console.log("Mouse up");
             }}
-            style={{ top: divY[i], left: divX[i], zIndex: CounterOut[i] }}
+            style={{ top: divY[i], left: divX[i], zIndex: Counter[i] }}
           >
             <div
               style={{
