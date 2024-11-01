@@ -11,6 +11,7 @@ type BoolsObject = {
 type StringObject = {
   [key: string]: string; // This allows indexing with numbers
 };
+var CounterOut: ValuesObject;
 var LoadedInternal = -1;
 function flashCard() {
   var Time: number;
@@ -39,6 +40,9 @@ function flashCard() {
   const [SwipedBool, setSwipedBool] = useState<BoolsObject>({});
   //Z-index counter for each layer
   const [Counter, setCounter] = useState<ValuesObject>({});
+
+  const setCounterOut = setCounter;
+
   // Fetch random photo for each layer
   const [photoUrl, setPhotoUrl] = useState<StringObject>({});
 
@@ -68,11 +72,12 @@ function flashCard() {
         [strElem]: window.innerHeight / 2,
       }));
       setSwipedBool((prevState) => ({ ...prevState, [strElem]: false }));
-      setCounter((prevState) => ({
+      setCounterOut((prevState) => ({
         ...prevState,
         [strElem]: 214748364 - elem,
       }));
-      console.log(Counter);
+      CounterOut = { ...CounterOut, [strElem]: 214748364 - elem };
+      console.log(CounterOut);
       // All images have been loaded: ALlow touch
     }
     //  }
@@ -89,6 +94,7 @@ function flashCard() {
         // Convert the ArrayBuffer to a Blob
         getRandomPhotoS(i.toString());
       }
+      photoData;
     });
   };
 
@@ -155,14 +161,13 @@ function flashCard() {
         clearInterval(SlideInterval);
         setSwipedBool((prevState) => ({ ...prevState, [StrID]: false }));
         getRandomPhoto(StrID);
-        const newCounter = Counter[id] - Layers;
-        setCounter((prevState) => ({
+        setCounterOut((prevState) => ({
           ...prevState,
-          [StrID]: newCounter,
+          [StrID]: CounterOut[id] - Layers,
         }));
-        console.log(newCounter);
+        CounterOut[id] = CounterOut[id] - Layers;
       }, 1000);
-      console.log(`Updated: ${Counter[id]}`);
+      console.log(`Updated: ${CounterOut[id]}`);
       // console.log(`Updated: ${CounterOut[id]}`);
     }
   }
@@ -174,6 +179,10 @@ function flashCard() {
           <div
             id={i.toString()}
             className={`flashCardDiv ${SwipedBool[i] ? "FadeOut" : ""}`}
+            onLoad={() => {
+              Start(i);
+              console.log("OnLoad");
+            }}
             onMouseDown={() => {
               setMDBool(true),
                 clearTimeout(IdleTimer),
@@ -182,9 +191,6 @@ function flashCard() {
             }}
             onMouseUp={() => {
               setMDBool(false), Swipe(i, false), console.log("Mouse up");
-            }}
-            onLoad={() => {
-              Start(i);
             }}
             style={{ top: divY[i], left: divX[i], zIndex: Counter[i] }}
           >
