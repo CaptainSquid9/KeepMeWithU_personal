@@ -16,7 +16,7 @@ var LoadedInternal = -1;
 var CounterOut: ValuesObject;
 function flashCard() {
   var Time: number;
-  var photoData: Array<string>;
+  var [photoData, setPhotoData] = useState<Array<string>>([]);
   Time = new Date().getHours();
 
   var Timer: NodeJS.Timeout | undefined;
@@ -88,7 +88,7 @@ function flashCard() {
 
   const fetchPhotos = async () => {
     axios.get("/api/randomPhoto").then((response) => {
-      photoData = response.data;
+      setPhotoData(response.data);
       console.log(photoData);
 
       for (var i = 0; i < Layers; i++) {
@@ -101,7 +101,7 @@ function flashCard() {
   const getRandomPhoto = async (id: string) => {
     //console.log(folderId);
     //if (Time > 10 && Time < 21) {
-    console.log("Function called");
+    console.log("Function called" + photoData.length);
 
     var Random = Math.floor(Math.random() * photoData.length);
     console.log(photoData[Random]);
