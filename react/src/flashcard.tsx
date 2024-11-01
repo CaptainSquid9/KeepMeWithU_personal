@@ -93,16 +93,16 @@ function flashCard() {
       console.log(photodata, photoData);
       for (var i = 0; i < Layers; i++) {
         // Convert the ArrayBuffer to a Blob
-        getRandomPhoto(i.toString());
+        getRandomPhotoS(i.toString());
       }
       photoData;
     });
   };
 
-  const getRandomPhoto = async (id: string) => {
+  //Get random photo start
+  const getRandomPhotoS = async (id: string) => {
     //console.log(folderId);
     //if (Time > 10 && Time < 21) {
-    console.log(photodata.length);
     console.log(photoData.length);
 
     var Random = Math.floor(Math.random() * photoData.length);
@@ -113,6 +113,21 @@ function flashCard() {
       [id]: photoData[Random].toString(),
     }));
   };
+
+  const getRandomPhoto = async (id: string) => {
+    //console.log(folderId);
+    //if (Time > 10 && Time < 21) {
+    console.log(photodata.length);
+
+    var Random = Math.floor(Math.random() * photodata.length);
+    console.log(photodata[Random]);
+
+    setPhotoUrl((prevState) => ({
+      ...prevState,
+      [id]: photodata[Random],
+    }));
+  };
+
   useEffect(() => {
     if (start_check == false) {
       start_check = true;
