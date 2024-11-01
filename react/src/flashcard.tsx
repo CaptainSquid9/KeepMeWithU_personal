@@ -13,7 +13,7 @@ type StringObject = {
 };
 var LoadedInternal = -1;
 
-var CounterOut: ValuesObject;
+var CounterOut: ValuesObject = {};
 function flashCard() {
   var Time: number;
   var photoData: Array<string>;
