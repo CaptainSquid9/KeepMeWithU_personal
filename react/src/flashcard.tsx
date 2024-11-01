@@ -69,7 +69,6 @@ function flashCard() {
         [strElem]: window.innerHeight / 2,
       }));
       setSwipedBool((prevState) => ({ ...prevState, [strElem]: false }));
-      Counter = { ...Counter, [strElem]: 214748364 - elem };
       //console.log(CounterOut);
       // All images have been loaded: ALlow touch
     }
@@ -84,6 +83,7 @@ function flashCard() {
       setPhotoData(response.data);
       console.log(photodata, photoData);
       for (var i = 0; i < Layers; i++) {
+        Counter = { ...Counter, [i.toString()]: 214748364 - i };
         // Convert the ArrayBuffer to a Blob
         getRandomPhotoS(i.toString());
       }
