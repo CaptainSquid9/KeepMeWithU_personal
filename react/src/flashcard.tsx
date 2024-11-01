@@ -102,9 +102,8 @@ function flashCard() {
   const getRandomPhoto = async (id: string) => {
     //console.log(folderId);
     //if (Time > 10 && Time < 21) {
-    console.log(
-      "Function called, " + photoData.length + ", " + photodata.length
-    );
+    console.log(photoData.length);
+    console.log(photodata.length);
 
     var Random = Math.floor(Math.random() * photoData.length);
     console.log(photoData[Random]);
