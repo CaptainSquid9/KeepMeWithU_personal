@@ -16,7 +16,6 @@ var LoadedInternal = -1;
 function flashCard() {
   var Time: number;
   var photoData: Array<string>;
-  const [photodata, setPhotoData] = useState<Array<string>>([]);
   Time = new Date().getHours();
 
   var Timer: NodeJS.Timeout | undefined;
@@ -77,7 +76,6 @@ function flashCard() {
         [strElem]: 214748364 - elem,
       }));
       CounterOut = { ...CounterOut, [strElem]: 214748364 - elem };
-      console.log(CounterOut);
       // All images have been loaded: ALlow touch
     }
     //  }
@@ -88,8 +86,6 @@ function flashCard() {
   const fetchPhoto = async () => {
     axios.get("/api/randomPhoto").then((response) => {
       photoData = response.data;
-      setPhotoData(response.data);
-      console.log(photodata, photoData);
       for (var i = 0; i < Layers; i++) {
         // Convert the ArrayBuffer to a Blob
         getRandomPhotoS(i.toString());
@@ -102,28 +98,12 @@ function flashCard() {
   const getRandomPhotoS = async (id: string) => {
     //console.log(folderId);
     //if (Time > 10 && Time < 21) {
-    console.log(photoData.length);
 
     var Random = Math.floor(Math.random() * photoData.length);
-    console.log(photoData[Random]);
 
     setPhotoUrl((prevState) => ({
       ...prevState,
       [id]: photoData[Random].toString(),
-    }));
-  };
-
-  const getRandomPhoto = async (id: string) => {
-    //console.log(folderId);
-    //if (Time > 10 && Time < 21) {
-    console.log(photodata.length);
-
-    var Random = Math.floor(Math.random() * photodata.length);
-    console.log(photodata[Random]);
-
-    setPhotoUrl((prevState) => ({
-      ...prevState,
-      [id]: photodata[Random],
     }));
   };
 
@@ -154,7 +134,6 @@ function flashCard() {
           Swipe(id + 1, false);
         }
       }, 15000);
-      console.log(Timer);
 
       setIdleTimer(Timer);
       //Once animation is done
