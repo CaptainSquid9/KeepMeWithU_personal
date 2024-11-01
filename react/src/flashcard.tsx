@@ -47,7 +47,7 @@ function flashCard() {
     setLoadedPictures(LoadedPictures + 1);
     LoadedInternal += 1;
     //console.log(`Loaded pictures: ${LoadedPictures}, ${LoadedInternal}`);
-    if (LoadedInternal == Layers - 1) {
+    if (LoadedInternal == Layers) {
       setAllow(true);
       AllowSlide = true;
       Timer = setTimeout(() => {
@@ -55,7 +55,7 @@ function flashCard() {
       }, 1000);
       setIdleTimer(Timer);
       //  console.log("Done");
-    } else if (LoadedPictures < Layers - 1 || LoadedInternal < Layers - 1) {
+    } else if (LoadedPictures < Layers || LoadedInternal < Layers) {
       let strElem = elem.toString();
       //console.log("positioning");
       //Set default
