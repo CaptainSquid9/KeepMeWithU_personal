@@ -108,7 +108,7 @@ function flashCard() {
 
     setPhotoUrl((prevState) => ({
       ...prevState,
-      [id]: photoData[Random].toString(),
+      [id]: photoData[Random],
     }));
   };
   useEffect(() => {
