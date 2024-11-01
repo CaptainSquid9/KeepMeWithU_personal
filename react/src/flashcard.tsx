@@ -42,8 +42,6 @@ function flashCard() {
   //Z-index counter for each layer
   const [Counter, setCounter] = useState<ValuesObject>({});
 
-  const setCounterOut = setCounter;
-
   // Fetch random photo for each layer
   const [photoUrl, setPhotoUrl] = useState<StringObject>({});
 
@@ -73,7 +71,7 @@ function flashCard() {
         [strElem]: window.innerHeight / 2,
       }));
       setSwipedBool((prevState) => ({ ...prevState, [strElem]: false }));
-      setCounterOut((prevState) => ({
+      setCounter((prevState) => ({
         ...prevState,
         [strElem]: 214748364 - elem,
       }));
@@ -138,8 +136,6 @@ function flashCard() {
   function Swipe(id: number, update: boolean) {
     if ((AllowSlide == true || Allow == true) && update == false) {
       var SlideInterval: NodeJS.Timeout;
-      var InternalCounterX = divX[id];
-      var InternalCounterY = divY[id];
       const StrID = id.toString();
 
       setAllow(false);
@@ -157,39 +153,6 @@ function flashCard() {
       console.log(Timer);
 
       setIdleTimer(Timer);
-
-      const RandomQuarter = Math.floor(Math.random() * 3);
-      //Move flash card on one of the four diagonals depending on quadrile
-      if (RandomQuarter == 0) {
-        SlideInterval = setInterval(() => {
-          setDivX((prevState) => ({ ...prevState, [StrID]: InternalCounterX }));
-          setDivY((prevState) => ({ ...prevState, [StrID]: InternalCounterY }));
-          InternalCounterX += 1;
-          InternalCounterY += 1;
-        }, 100);
-      } else if (RandomQuarter == 1) {
-        SlideInterval = setInterval(() => {
-          setDivX((prevState) => ({ ...prevState, [StrID]: InternalCounterX }));
-          setDivY((prevState) => ({ ...prevState, [StrID]: InternalCounterY }));
-          InternalCounterX -= 1;
-          InternalCounterY -= 1;
-        }, 100);
-      } else if (RandomQuarter == 2) {
-        SlideInterval = setInterval(() => {
-          setDivX((prevState) => ({ ...prevState, [StrID]: InternalCounterX }));
-          setDivY((prevState) => ({ ...prevState, [StrID]: InternalCounterY }));
-          InternalCounterX += 1;
-          InternalCounterY -= 1;
-        }, 100);
-      } else {
-        SlideInterval = setInterval(() => {
-          setDivX((prevState) => ({ ...prevState, [StrID]: InternalCounterX }));
-          setDivY((prevState) => ({ ...prevState, [StrID]: InternalCounterY }));
-          InternalCounterX -= 1;
-          InternalCounterY += 1;
-        }, 100);
-      }
-
       //Once animation is done
       setTimeout(() => {
         setAllow(true);
@@ -197,17 +160,9 @@ function flashCard() {
         clearInterval(SlideInterval);
         setSwipedBool((prevState) => ({ ...prevState, [StrID]: false }));
         getRandomPhoto(StrID);
-        setDivX((prevState) => ({
+        setCounter((prevState) => ({
           ...prevState,
-          [StrID]: window.innerWidth / 2,
-        }));
-        setDivY((prevState) => ({
-          ...prevState,
-          [StrID]: window.innerHeight / 2,
-        }));
-        setCounterOut((prevState) => ({
-          ...prevState,
-          [StrID]: CounterOut[id] - Layers,
+          [StrID]: Counter[id] - Layers,
         }));
         CounterOut = { ...CounterOut, [StrID]: CounterOut[id] - Layers };
       }, 2000);
@@ -231,11 +186,11 @@ function flashCard() {
             onMouseUp={() => {
               setMDBool(false), Swipe(i, false), console.log("Mouse up");
             }}
-            style={{ top: divY[i], left: divX[i], zIndex: Counter[i] }}
+            style={{ top: divY[i], left: divX[i], zIndex: CounterOut[i] }}
           >
             <div
               style={{
-                backgroundImage: `${photoUrl[i]}`,
+                backgroundImage: `url(${photoUrl[i]})`,
                 backgroundPosition: "center",
                 backgroundSize: "cover",
                 filter: "blur(8px)",
