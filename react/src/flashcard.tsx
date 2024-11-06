@@ -58,7 +58,7 @@ function flashCard() {
       }, 1000);
       setIdleTimer(Timer);
       //  console.log("Done");
-    } else if (LoadedPictures < Layers || LoadedInternal < Layers) {
+    } else if (LoadedPictures <= Layers || LoadedInternal <= Layers) {
       let strElem = elem.toString();
       //console.log("positioning");
       //Set default
