@@ -58,7 +58,7 @@ function flashCard() {
       }, 1000);
       setIdleTimer(Timer);
       //  console.log("Done");
-    } else if (LoadedPictures <= Layers || LoadedInternal <= Layers) {
+    } else if (LoadedPictures < Layers || LoadedInternal < Layers) {
       let strElem = elem.toString();
       //console.log("positioning");
       //Set default
@@ -109,7 +109,7 @@ function flashCard() {
     if (start_check == false) {
       start_check = true;
       fetchPhoto();
-      for (var i = 0; i < Layers; i++) {
+      for (var i = 0; i <= Layers; i++) {
         Start(i);
       }
     }
