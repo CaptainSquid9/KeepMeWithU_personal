@@ -57,7 +57,7 @@ export default async function handler(req, res) {
     const images = [];
     const RandomStartingPt = Math.floor(Math.random() * files.length);
     for (var i = 0; i < 10; i++) {
-      var photoBase64 = await fetchPhoto(files[RandomStartingPt].id);
+      var photoBase64 = await fetchPhoto(files[RandomStartingPt + i].id);
       images.push(`data:image/jpeg;base64,${photoBase64}`);
     }
 
