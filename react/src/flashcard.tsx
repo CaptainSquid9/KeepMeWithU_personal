@@ -109,7 +109,7 @@ function flashCard() {
     if (start_check == false) {
       start_check = true;
       fetchPhoto();
-      for (var i = 0; i <= Layers; i++) {
+      for (var i = 0; i < Layers; i++) {
         Start(i);
       }
     }
@@ -184,6 +184,9 @@ function flashCard() {
               width={window.innerWidth}
               height={window.innerHeight}
               draggable="false"
+              onChange={() => {
+                Swipe(i, true);
+              }}
             ></img>
           </div>
         );
